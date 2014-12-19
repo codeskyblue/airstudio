@@ -43,15 +43,21 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    X: <span id="dataX"></span><br/>
-                    Y: <span id="dataY"></span><br/>
-                    Width: <span id="dataWidth"></span><br/>
-                    Height: <span id="dataHeight"></span><br/>
-                    Middle: <span id="dataMiddle"></span><br/>
+                    中间点: <strong id="dataMiddle"></strong><br/>
+                    左上角坐标: (<span id="dataX"></span>, <span id="dataY"></span>)<br/>
+                    宽: <span id="dataWidth"></span> 高: <span id="dataHeight"></span><br/>
                     特征点数量: <span id="dataSiftCount"></span>
                 </div>
             </div>
         </div>
+		<div>
+			<h3>匹配结果 <small id="resultStatus"></small></h3>
+			<strong>template</strong>
+			<div id="resultTemplate"></div>
+			<strong>sift</strong>
+			<div id="resultSIFT"></div>
+			<hr/>
+		</div>
         <div class="row">
             <div class="col-md-2">
                 <button id="btn-refresh" class="btn btn-default btn-success">
@@ -99,11 +105,14 @@ $(function(){
         $dataHeight = $("#dataHeight"),
         $dataMiddle = $("#dataMiddle"),
         $dataSiftCount = $("#dataSiftCount");
+		$resultTemplate = $("#resultTemplate");
+		$resultSIFT = $("#resultSIFT");
 
     var cropperData = {};
     var screenFilename = null;
 
     var updateSiftCount = function(data){
+		$("#resultStatus").text("loading");
         $.ajax({
             url: "/api/cropcheck",
             dataType: "json",
@@ -112,6 +121,9 @@ $(function(){
             success: function(e){
                 console.log(e);
                 $dataSiftCount.text(e.siftcnt);
+				$resultTemplate.text(e.result_template);
+				$resultSIFT.text(e.result_sift);
+				$("#resultStatus").text("");
             },
             error: function(e){
                 console.log(e);

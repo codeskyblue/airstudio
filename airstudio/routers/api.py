@@ -5,7 +5,8 @@ import os
 import flask
 
 import airtest
-import airtest.image as aim
+#import airtest.image as aim
+import aircv as ac
 import cv2
 import time
 
@@ -57,10 +58,14 @@ def crop_check():
     screen_file = screen.lstrip('/').replace('/', os.sep)
     screen_path = os.path.join(utils.selfdir(), screen_file)
 
-    im = cv2.imread(screen_path)
-    im = im[y:y+height, x:x+width]  # crop image
-    siftcnt = aim.sift_point_count(im)
-    return flask.jsonify(dict(siftcnt=siftcnt))
+    imsrc = cv2.imread(screen_path)
+    imsch = imsrc[y:y+height, x:x+width]  # crop image
+    siftcnt = ac.sift_count(imsch)
+    tmpl = ac.find_all_template(imsrc, imsch)
+    sift = ac.find_all_sift(imsrc, imsch)
+    #match_result = 'template: %s\nsift: %s' % (str(tmpl), str(sift))
+    return flask.jsonify(dict(siftcnt=siftcnt, 
+        result_template=str(tmpl), result_sift = str(sift)))
 
 @bp.route('/run')
 def run_code():
