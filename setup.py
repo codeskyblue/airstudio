@@ -28,8 +28,9 @@ setup(
           'humanize >= 0.5',
           'requests >= 2.4.3', 
           'Flask >= 0.10.1',
+          'aircv >= 1.01',
           ],
       entry_points='''
       [console_scripts]
-      air.studio = airtest:main
+      air.studio = airstudio:main
       ''')
